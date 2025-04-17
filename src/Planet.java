@@ -21,10 +21,13 @@ public class Planet
         this.T = T;
         this.R = R;
 
-        a = Math.cbrt(Math.pow(T, 2));
-        b = Math.sqrt(Math.abs(R * (2 * a - R)));
-        e = Math.sqrt(Math.abs((1 - Math.pow(b, 2)) / Math.pow(a, 2)));
-        p = a * (1 - Math.pow(e, 2));
+        a = Math.cbrt(Constants.G * Constants.M * Math.pow(T, 2) / (4 * Math.pow(Math.PI, 2)));
+        //b = a + 1000;
+        b = Math.sqrt(2 * a * R - R*R);
+      //  e = Math.sqrt(a * a + b * b);
+        e = Math.sqrt(1 - Math.pow(b, 2)/Math.pow(a, 2));
+        p = Math.pow(b, 2) / a;  
+        //p = a * (1 - Math.pow(e, 2));
         w_aver = 2 * Math.PI / T;
 
         x = a;
@@ -32,7 +35,7 @@ public class Planet
     }
 
     
-    double getW(double t) { return Math.sqrt(Math.abs((Constants.G * Constants.M * p) / Math.pow(getR(t), 2))); }
+    double getW(double t) { return Math.sqrt((Constants.G * Constants.M * p) / Math.pow(getR(t), 2)); }
     
     double updateE(double E, double M) { return E - (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E)); }
     double calculateE(double E, double M) 
@@ -50,16 +53,22 @@ public class Planet
     {
         double M = (w_aver) * t;
         double E0 = M + e * Math.sin(M);
+
+
+        //double E = (2 * Math.PI) / T * t + e;
+        //double M = E - e;
         
         return a * (1 - e * Math.cos(calculateE(E0, M)));
+        //return a * (1 - e * Math.cos(E));
     }
 
-    double getX(double t, double W) { return a + a * Math.cos(W); }
-    double getY(double t, double W) { return b * Math.sin(W); }
+    double getX(double t, double W) { return a * Math.cos(W * t); }
+    double getY(double t, double W) { return a + b * Math.sin(W * t); }
 
     void update(double t)
     {
-        double W = getW(t);
+       double W = 2 * Math.PI / T; 
+       //double W = getW(t);
         x = getX(t, W);
         y = getY(t, W);
     }
