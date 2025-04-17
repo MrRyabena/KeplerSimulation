@@ -21,10 +21,10 @@ public class Planet
         this.T = T;
         this.R = R;
 
-        a = Math.cbrt(Math.pow(T*T, 2));
-        b = Math.sqrt(R * (2 * a - R));
+        a = Math.cbrt(Math.pow(T, 2));
+        b = Math.sqrt(Math.abs(R * (2 * a - R)));
+        e = Math.sqrt(Math.abs((1 - Math.pow(b, 2)) / Math.pow(a, 2)));
         p = a * (1 - Math.pow(e, 2));
-        e = Math.pow(1 - Math.pow(b, 2) / Math.pow(a, 2), 2);
         w_aver = 2 * Math.PI / T;
 
         x = a;
@@ -32,7 +32,7 @@ public class Planet
     }
 
     
-    double getW(double t) { return Math.sqrt((Constants.G * Constants.M * p) / Math.pow(getR(t), 2); }
+    double getW(double t) { return Math.sqrt(Math.abs((Constants.G * Constants.M * p) / Math.pow(getR(t), 2))); }
     
     double updateE(double E, double M) { return E - (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E)); }
     double calculateE(double E, double M) 
