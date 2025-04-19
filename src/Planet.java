@@ -16,10 +16,10 @@ public class Planet
     public double w_aver;
 
 
-    public Planet(double T, double R) 
+    public Planet(double T_days, double R_Mkm) 
     {
-        this.T = T;
-        this.R = R;
+        this.T = T_days * 24 * 60 * 60;
+        this.R = R_Mkm * 1.e9;
 
         a = Math.cbrt(Constants.G * Constants.M * Math.pow(T, 2) / (4 * Math.pow(Math.PI, 2)));
         //b = a + 1000;
